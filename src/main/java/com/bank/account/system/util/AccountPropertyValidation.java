@@ -16,16 +16,14 @@ public class AccountPropertyValidation {
         return ownerName;
     }
 
-    public static BigDecimal checkInitialDepositIsValid(AccountType type, BigDecimal initialDeposit) {
-        if (initialDeposit == null) {
+    public static BigDecimal checkBalanceIsValidForAccountType(AccountType type, BigDecimal balance) {
+        if (balance == null) {
             throw new IllegalArgumentException("Initial deposit cannot be null");
         }
-        if (initialDeposit.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException("Initial deposit cannot be negative");
+        if (balance.compareTo(type.getAllowedMinimumBalance()) < 0) {
+            throw new IllegalArgumentException("Initial deposit cannot be less than the allowed minimum balance for %s account with minimum balance %s"
+                    .formatted(type, type.getAllowedMinimumBalance()));
         }
-        if (type.equals(AccountType.SAVINGS) && initialDeposit.compareTo(new BigDecimal(10)) < 0) {
-            throw new IllegalArgumentException("Initial deposit cannot be less than 10 for SAVINGS account type");
-        }
-        return initialDeposit;
+        return balance;
     }
 }

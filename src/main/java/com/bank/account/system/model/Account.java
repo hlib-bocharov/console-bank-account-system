@@ -2,6 +2,7 @@ package com.bank.account.system.model;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Account {
@@ -17,7 +18,7 @@ public class Account {
     }
 
     public Account(String accountNumber, String ownerName, AccountType type, BigDecimal balance) {
-        this(accountNumber, ownerName, type, balance, new ArrayList<>());
+        this(accountNumber, ownerName, type, balance, new LinkedList<>());
     }
 
     public Account(String accountNumber, String ownerName, AccountType type, BigDecimal balance, List<Transaction> transactions) {
