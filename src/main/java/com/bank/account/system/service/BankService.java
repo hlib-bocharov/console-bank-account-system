@@ -25,7 +25,7 @@ public class BankService {
     public Account findAccount(String accountNumber) {
         Account account = bank.getAccounts().get(accountNumber);
         if (account == null) {
-            throw new AccountNotFoundException();
+            throw new AccountNotFoundException("");
         }
         return account;
     }
@@ -35,7 +35,7 @@ public class BankService {
             findAccount(accountNumber);
             bank.getAccounts().remove(accountNumber);
         } catch (AccountNotFoundException e) {
-            throw new AccountNotFoundException();
+            throw new AccountNotFoundException("");
         }
     }
 

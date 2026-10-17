@@ -1,7 +1,7 @@
 package com.bank.account.system.model;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
+import java.math.RoundingMode;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -25,7 +25,7 @@ public class Account {
         this.accountNumber = accountNumber;
         this.ownerName = ownerName;
         this.type = type;
-        this.balance = balance;
+        this.balance = balance.setScale(2, RoundingMode.HALF_UP);
         this.transactions = transactions;
     }
 
