@@ -5,8 +5,8 @@ import com.bank.account.system.model.AccountType;
 
 import java.math.BigDecimal;
 
-import static com.bank.account.system.util.AccountNumberGenerator.generateAccountNumber;
-import static com.bank.account.system.util.AccountPropertyValidation.checkBalanceIsValidForAccountType;
+import static com.bank.account.system.util.AccountNumberGenerator.next;
+import static com.bank.account.system.util.AccountPropertyValidation.getBalanceIfValidForAccountType;
 import static com.bank.account.system.util.AccountPropertyValidation.checkOwnerNameIsValid;
 
 public class AccountService {
@@ -18,10 +18,10 @@ public class AccountService {
     }
 
     public Account openAccount(String owner, AccountType type, BigDecimal initialDeposit) {
-        return new Account(generateAccountNumber(),
+        return new Account(next(),
                     checkOwnerNameIsValid(owner),
                     type,
-                    checkBalanceIsValidForAccountType(type, initialDeposit));
+                    getBalanceIfValidForAccountType(type, initialDeposit));
     }
 
     public BigDecimal getBalance(String accountNumber) {

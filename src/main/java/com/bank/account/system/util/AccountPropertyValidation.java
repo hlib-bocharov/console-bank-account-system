@@ -6,6 +6,8 @@ import java.math.BigDecimal;
 
 public class AccountPropertyValidation {
 
+    private AccountPropertyValidation() {}
+
     public static String checkOwnerNameIsValid(String ownerName) {
         if (ownerName == null) {
             return "Owner name cannot be null";
@@ -16,12 +18,12 @@ public class AccountPropertyValidation {
         return ownerName;
     }
 
-    public static BigDecimal checkBalanceIsValidForAccountType(AccountType type, BigDecimal balance) {
+    public static BigDecimal getBalanceIfValidForAccountType(AccountType type, BigDecimal balance) {
         if (balance == null) {
-            throw new IllegalArgumentException("Initial deposit cannot be null");
+            throw new IllegalArgumentException("Balance cannot be null");
         }
         if (balance.compareTo(type.getAllowedMinimumBalance()) < 0) {
-            throw new IllegalArgumentException("Initial deposit cannot be less than the allowed minimum balance for %s account with minimum balance %s"
+            throw new IllegalArgumentException("Balance cannot be less than the allowed minimum balance for %s account with minimum balance %s"
                     .formatted(type, type.getAllowedMinimumBalance()));
         }
         return balance;

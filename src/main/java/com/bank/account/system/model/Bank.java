@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class Bank {
 
-    private String name;
+    private final String name;
     private final String code;
     private final Map<String, Account> accounts;
 
@@ -27,10 +27,6 @@ public class Bank {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getCode() {
         return code;
     }
@@ -39,4 +35,8 @@ public class Bank {
         return accounts;
     }
 
+    @Override
+    public String toString() {
+        return "%s (%s)".formatted(name, code);
+    }
 }

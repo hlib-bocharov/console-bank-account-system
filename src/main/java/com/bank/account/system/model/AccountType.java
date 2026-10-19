@@ -4,10 +4,14 @@ import java.math.BigDecimal;
 
 public enum AccountType {
 
-    CHECKING(0),
+    CHECKING,
     SAVINGS(10);
 
     private BigDecimal allowedMinimumBalance;
+
+    AccountType() {
+        this(0);
+    }
 
     AccountType(double value) {
         allowedMinimumBalance = new BigDecimal(value);

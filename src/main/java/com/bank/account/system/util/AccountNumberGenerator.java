@@ -1,10 +1,19 @@
 package com.bank.account.system.util;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class AccountNumberGenerator {
 
-    private static int counter = 0;
+    private static AtomicInteger counter = new AtomicInteger();
+    private static AtomicInteger defaultCounter = new AtomicInteger();
 
-    public static String generateAccountNumber() {
-        return "ACC%03d".formatted(++counter);
+    private AccountNumberGenerator() {}
+
+    public static String next() {
+        return "ACC%03d".formatted(counter.incrementAndGet());
+    }
+
+    public static String nextDefault() {
+        return "DEF%03d".formatted(defaultCounter.incrementAndGet());
     }
 }

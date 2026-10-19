@@ -7,6 +7,8 @@ import com.bank.account.system.model.Bank;
 import java.math.BigDecimal;
 import java.util.List;
 
+import static com.bank.account.system.util.MoneyUtils.getFormattedAmount;
+
 public class BankService {
 
     private final Bank bank;
@@ -25,7 +27,7 @@ public class BankService {
     public Account findAccount(String accountNumber) {
         Account account = bank.getAccounts().get(accountNumber);
         if (account == null) {
-            throw new AccountNotFoundException("");
+            throw new AccountNotFoundException("Account number " + accountNumber + " not found");
         }
         return account;
     }
@@ -35,7 +37,7 @@ public class BankService {
             findAccount(accountNumber);
             bank.getAccounts().remove(accountNumber);
         } catch (AccountNotFoundException e) {
-            throw new AccountNotFoundException("");
+            throw new AccountNotFoundException("Account number " + accountNumber + " not found");
         }
     }
 
@@ -54,9 +56,9 @@ public class BankService {
     }
 
     public String getSummary() {
-        return "Bank Summary:%nname: %s%ncode: %s%naccount count: %d%ntotal holdings: %s%n"
+        return "Bank Summary:%n\tname: %s%n\tcode: %s%n\taccount count: %d%n\ttotal holdings: %s%n"
                 .formatted(
-                        bank.getName(), bank.getCode(), getAccountCount(), getTotalHoldings()
+                        bank.getName(), bank.getCode(), getAccountCount(), getFormattedAmount(getTotalHoldings())
                 );
     }
 

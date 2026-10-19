@@ -1,15 +1,19 @@
 package com.bank.account.system.model;
 
 import java.math.BigDecimal;
+import java.time.ZonedDateTime;
+
+import static com.bank.account.system.util.MoneyUtils.getFormattedAmount;
 
 public class Transaction {
 
-    private TransactionType type;
-    private BigDecimal amount;
-    private String timestamp;
-    private BigDecimal resultingBalance;
+    private final TransactionType type;
+    private final BigDecimal amount;
+    private final String timestamp;
+    private final BigDecimal resultingBalance;
 
     public Transaction() {
+        this(TransactionType.DEPOSIT, BigDecimal.TEN, ZonedDateTime.now().toString(), BigDecimal.TEN);
     }
 
     public Transaction(TransactionType type, BigDecimal amount, String timestamp, BigDecimal resultingBalance) {
@@ -23,31 +27,20 @@ public class Transaction {
         return type;
     }
 
-    public void setType(TransactionType type) {
-        this.type = type;
-    }
-
     public BigDecimal getAmount() {
         return amount;
-    }
-
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
     }
 
     public String getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(String timestamp) {
-        this.timestamp = timestamp;
-    }
-
     public BigDecimal getResultingBalance() {
         return resultingBalance;
     }
 
-    public void setResultingBalance(BigDecimal resultingBalance) {
-        this.resultingBalance = resultingBalance;
+    @Override
+    public String toString() {
+        return "%s transaction with %s at %s and resulting balance is %s".formatted(type, amount, timestamp, getFormattedAmount(resultingBalance));
     }
 }

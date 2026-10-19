@@ -4,17 +4,21 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
+
+import static com.bank.account.system.util.AccountNumberGenerator.nextDefault;
+import static com.bank.account.system.util.MoneyUtils.getFormattedAmount;
 
 public class Account {
 
-    private String accountNumber;
+    private final String accountNumber;
     private String ownerName;
-    private AccountType type;
+    private final AccountType type;
     private BigDecimal balance;
     private List<Transaction> transactions;
 
     public Account() {
-
+        this(nextDefault(), "John Doe", AccountType.CHECKING,  BigDecimal.ZERO);
     }
 
     public Account(String accountNumber, String ownerName, AccountType type, BigDecimal balance) {
@@ -33,10 +37,6 @@ public class Account {
         return accountNumber;
     }
 
-    public void setAccountNumber(String accountNumber) {
-        this.accountNumber = accountNumber;
-    }
-
     public String getOwnerName() {
         return ownerName;
     }
@@ -49,10 +49,6 @@ public class Account {
         return type;
     }
 
-    public void setType(AccountType type) {
-        this.type = type;
-    }
-
     public BigDecimal getBalance() {
         return balance;
     }
@@ -62,10 +58,30 @@ public class Account {
     }
 
     public List<Transaction> getTransactions() {
-        return transactions;
+        return List.copyOf(transactions);
     }
 
     public void setTransactions(List<Transaction> transactions) {
         this.transactions = transactions;
+    }
+
+    public void addTransaction(Transaction transaction) {
+        this.transactions.addFirst(transaction);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Account account)) return false;
+        return Objects.equals(accountNumber, account.accountNumber);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(accountNumber);
+    }
+
+    @Override
+    public String toString() {
+        return "%s for %s with balance %s".formatted(accountNumber, ownerName, getFormattedAmount(balance));
     }
 }
