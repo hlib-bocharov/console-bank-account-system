@@ -1,0 +1,59 @@
+package com.bank.account.system.test.bank;
+
+import com.bank.account.system.exception.AccountNotFoundException;
+import com.bank.account.system.model.Account;
+import com.bank.account.system.model.AccountType;
+import com.bank.account.system.test.BaseTest;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+
+import java.math.BigDecimal;
+import java.util.Collections;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+public class FindAccountTest extends BaseTest {
+
+    @ParameterizedTest
+    @DisplayName("Verify find account successfully returns existing account in the bank")
+    @ValueSource(strings = {"1234", "   1234", "1234   ", "   1234   "})
+    public void verifySuccessfullyReturnsExistingAccount(String accountNumber) {
+        Account account = new Account("1234", "John", AccountType.CHECKING, BigDecimal.TWO);
+        bankService.registerAccount(account);
+        Account foundAcc = bankService.findAccount(accountNumber);
+        assertEquals(account, foundAcc);
+        assertEquals("1234", foundAcc.getAccountNumber());
+        assertEquals("John", foundAcc.getOwnerName());
+        assertEquals(AccountType.CHECKING, foundAcc.getType());
+        assertEquals(new BigDecimal("2.00"), foundAcc.getBalance());
+        assertEquals(Collections.emptyList(), foundAcc.getTransactions());
+    }
+
+    @ParameterizedTest
+    @DisplayName("Verify find account fails with empty values")
+    @ValueSource(strings = {" ", ""})
+    public void verifyFindAccountFailsWithEmptyAccountNumber(String accountNumber) {
+        var exception = assertThrows(IllegalArgumentException.class, () -> bankService.findAccount(accountNumber));
+        assertEquals("Account number must be not blank", exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("Verify find account fails with null value")
+    public void verifyFindAccountFailsWithNullAccountNumber() {
+        var exception = assertThrows(IllegalArgumentException.class, () -> bankService.findAccount(null));
+        assertEquals("Account number must be not null", exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("Verify find account fails with account number is missed in the bank")
+    public void verifyFindAccountFailsWhenAccountNumberIsMissed() {
+        Account account = new Account("1234", "John", AccountType.CHECKING, BigDecimal.TWO);
+        bankService.registerAccount(account);
+        var exception = assertThrows(AccountNotFoundException.class, () -> bankService.findAccount("4321"));
+        assertEquals("Account number 4321 not found", exception.getMessage());
+    }
+
+}
