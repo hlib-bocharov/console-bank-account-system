@@ -14,7 +14,7 @@ public enum AccountType {
     }
 
     AccountType(double value) {
-        allowedMinimumBalance = new BigDecimal(value);
+        allowedMinimumBalance = new BigDecimal(value).setScale(2);
     }
 
     public BigDecimal getAllowedMinimumBalance() {

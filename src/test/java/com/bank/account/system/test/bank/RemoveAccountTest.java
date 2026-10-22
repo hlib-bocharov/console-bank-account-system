@@ -7,6 +7,7 @@ import com.bank.account.system.test.BaseTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.math.BigDecimal;
@@ -17,9 +18,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class RemoveAccountTest extends BaseTest {
 
     @ParameterizedTest
-    @DisplayName("Verify remove account successfully removes existing account from the bank")
+    @DisplayName("Remove account successfully removes existing account from the bank")
     @ValueSource(strings = {"1234", "   1234", "1234   ", "   1234   "})
-    public void verifyRemoveAccountSuccessfullyRemovesExistingAccount(String accountNumber) {
+    public void testRemoveAccountSuccessfullyRemovesExistingAccount(String accountNumber) {
         Account account = new Account("1234", "John", AccountType.CHECKING, BigDecimal.TWO);
         bank.getAccounts().put("1234", account);
         bankService.removeAccount(accountNumber);
@@ -27,23 +28,16 @@ public class RemoveAccountTest extends BaseTest {
     }
 
     @ParameterizedTest
-    @DisplayName("Verify remove account fails with empty values")
-    @ValueSource(strings = {" ", ""})
-    public void verifyRemoveAccountFailsWithEmptyAccountNumber(String accountNumber) {
+    @DisplayName("Remove account fails with invalid values")
+    @MethodSource("getInvalidAccountNumbers")
+    public void testRemoveAccountFailsWithEmptyAccountNumber(String accountNumber, String expectedMessage) {
         var exception = assertThrows(IllegalArgumentException.class, () -> bankService.removeAccount(accountNumber));
-        assertEquals("Account number must be not blank", exception.getMessage());
+        assertEquals(expectedMessage, exception.getMessage());
     }
 
     @Test
-    @DisplayName("Verify remove account fails with null value")
-    public void verifyRemoveAccountFailsWithNullAccountNumber() {
-        var exception = assertThrows(IllegalArgumentException.class, () -> bankService.removeAccount(null));
-        assertEquals("Account number must be not null", exception.getMessage());
-    }
-
-    @Test
-    @DisplayName("Verify remove account fails with account number is missed in the bank")
-    public void verifyRemoveAccountFailsWhenAccountNumberIsMissed() {
+    @DisplayName("Remove account fails with account number is missed in the bank")
+    public void testRemoveAccountFailsWhenAccountNumberIsMissed() {
         Account account = new Account("1234", "John", AccountType.CHECKING, BigDecimal.TWO);
         bankService.registerAccount(account);
         var exception = assertThrows(AccountNotFoundException.class, () -> bankService.removeAccount("4321"));

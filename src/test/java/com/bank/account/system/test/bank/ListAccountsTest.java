@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class ListAccountsTest extends BaseTest {
 
     @Test
-    @DisplayName("Verify that list accounts returns two accounts")
+    @DisplayName("List accounts returns two accounts")
     public void testGetListAccountReturnsListOfTwoAccounts() {
         bankService.registerAccount(new Account("DEF001", "John Doe", AccountType.CHECKING,  BigDecimal.ZERO));
         bankService.registerAccount(new Account("DEF002", "Jill Grin", AccountType.SAVINGS,  BigDecimal.TEN));
@@ -28,7 +28,7 @@ public class ListAccountsTest extends BaseTest {
     }
 
     @Test
-    @DisplayName("Verify that list accounts returns one account")
+    @DisplayName("List accounts returns one account")
     public void testGetListAccountReturnsListOfOneAccount() {
         bankService.registerAccount(new Account());
         List<Account> actualAccounts = bankService.listAccounts();
@@ -40,7 +40,7 @@ public class ListAccountsTest extends BaseTest {
     }
 
     @Test
-    @DisplayName("Verify that list accounts returns empty account list")
+    @DisplayName("List accounts returns empty account list")
     public void testGetListAccountReturnsEmptyAccountList() {
         List<Account> actualAccounts = bankService.listAccounts();
         assertEquals(0,  actualAccounts.size(), "Accounts list should have no accounts");

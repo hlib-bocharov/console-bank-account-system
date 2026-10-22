@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class GetAccountCountTest extends BaseTest {
 
     @Test
-    @DisplayName("Verify that get account count returns two when bank has two accounts")
+    @DisplayName("Get account count returns two when bank has two accounts")
     public void testGetAccountCountReturnsValueTwo() {
         bankService.registerAccount(new Account("DEF001", "John Doe", AccountType.CHECKING,  BigDecimal.ZERO));
         bankService.registerAccount(new Account("DEF002", "Jill Grin", AccountType.SAVINGS,  BigDecimal.TEN));
@@ -22,7 +22,7 @@ public class GetAccountCountTest extends BaseTest {
     }
 
     @Test
-    @DisplayName("Verify that get account count returns one when bank has one account")
+    @DisplayName("Get account count returns one when bank has one account")
     public void testGetAccountCountReturnsValueOne() {
         bankService.registerAccount(new Account());
         int actualCount = bankService.getAccountCount();
@@ -30,7 +30,7 @@ public class GetAccountCountTest extends BaseTest {
     }
 
     @Test
-    @DisplayName("Verify that get account count returns zero when bank has no accounts")
+    @DisplayName("Get account count returns zero when bank has no accounts")
     public void testGetAccountCountReturnsValueZero() {
         int actualCount = bankService.getAccountCount();
         assertEquals(0,  actualCount, "Get account count should return zero");

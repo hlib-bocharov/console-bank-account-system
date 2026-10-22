@@ -10,10 +10,10 @@ public class AccountPropertyValidation {
 
     public static String checkOwnerNameIsValid(String ownerName) {
         if (ownerName == null) {
-            return "Owner name cannot be null";
+            throw new IllegalArgumentException("Owner name cannot be null");
         }
         if (ownerName.isBlank()) {
-            return "Owner name cannot be blank";
+            throw new IllegalArgumentException("Owner name cannot be blank");
         }
         return ownerName;
     }

@@ -29,8 +29,9 @@ public class AccountService {
     }
 
     public void renameOwner(String accountNumber, String newName) {
+        String checkedName = checkOwnerNameIsValid(newName);
         Account account = bankService.findAccount(accountNumber);
-        account.setOwnerName(checkOwnerNameIsValid(newName));
+        account.setOwnerName(checkedName);
     }
 
     public void closeAccount(String accountNumber) {
