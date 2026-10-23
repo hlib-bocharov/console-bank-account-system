@@ -14,31 +14,36 @@ public class BankService {
     private final Bank bank;
 
     public BankService(Bank bank) {
-       this.bank = bank;
+        this.bank = bank;
     }
 
     public void registerAccount(Account account) {
-        if (account == null || account.getAccountNumber() == null) {
-            throw new NullPointerException();
+        if (account == null) {
+            throw new IllegalArgumentException("Account must be not null.");
+        }
+        if (account.getAccountNumber() == null) {
+            throw new IllegalArgumentException("Account number must be not null.");
         }
         bank.getAccounts().putIfAbsent(account.getAccountNumber(), account);
     }
 
     public Account findAccount(String accountNumber) {
-        Account account = bank.getAccounts().get(accountNumber);
+        if (accountNumber == null) {
+            throw new IllegalArgumentException("Account number must be not null.");
+        }
+        if (accountNumber.isBlank()) {
+            throw new IllegalArgumentException("Account number must be not blank.");
+        }
+        Account account = bank.getAccounts().get(accountNumber.trim());
         if (account == null) {
-            throw new AccountNotFoundException("Account number " + accountNumber + " not found");
+            throw new AccountNotFoundException("Account number " + accountNumber + " not found.");
         }
         return account;
     }
 
     public void removeAccount(String accountNumber) {
-        try {
-            findAccount(accountNumber);
-            bank.getAccounts().remove(accountNumber);
-        } catch (AccountNotFoundException e) {
-            throw new AccountNotFoundException("Account number " + accountNumber + " not found");
-        }
+        Account account = findAccount(accountNumber);
+        bank.getAccounts().remove(account.getAccountNumber());
     }
 
     public List<Account> listAccounts() {
@@ -52,7 +57,7 @@ public class BankService {
     public BigDecimal getTotalHoldings() {
         return bank.getAccounts().values().stream()
                 .map(Account::getBalance)
-                .reduce(new BigDecimal(0), BigDecimal::add);
+                .reduce(new BigDecimal("0.00"), BigDecimal::add);
     }
 
     public String getSummary() {

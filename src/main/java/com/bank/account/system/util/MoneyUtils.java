@@ -12,10 +12,10 @@ public class MoneyUtils {
 
     public static BigDecimal getAmountIfValid(BigDecimal amount) {
         if (amount == null) {
-            throw new InvalidAmountException("Transaction amount cannot be null");
+            throw new InvalidAmountException("Transaction amount cannot be null.");
         }
         if (amount.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new InvalidAmountException("Transaction amount must be greater than zero");
+            throw new InvalidAmountException("Transaction amount must be greater than zero.");
         }
         return amount;
     }

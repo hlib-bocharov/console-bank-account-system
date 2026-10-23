@@ -6,7 +6,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
-import static com.bank.account.system.util.AccountNumberGenerator.nextDefault;
 import static com.bank.account.system.util.MoneyUtils.getFormattedAmount;
 
 public class Account {
@@ -18,7 +17,7 @@ public class Account {
     private List<Transaction> transactions;
 
     public Account() {
-        this(nextDefault(), "John Doe", AccountType.CHECKING,  BigDecimal.ZERO);
+        this("DEF001", "John Doe", AccountType.CHECKING,  BigDecimal.ZERO);
     }
 
     public Account(String accountNumber, String ownerName, AccountType type, BigDecimal balance) {
