@@ -28,7 +28,7 @@ public class CloseAccountTest extends BaseTest {
     @DisplayName("Close account fails with account number is missed in the bank")
     public void testCloseAccountFailsWhenAccountNumberIsMissed() {
         var exception = assertThrows(AccountNotFoundException.class, () -> accountService.closeAccount("INV111"));
-        assertEquals("Account number INV111 not found", exception.getMessage());
+        assertEquals("Account number INV111 not found.", exception.getMessage());
     }
 
     @Test

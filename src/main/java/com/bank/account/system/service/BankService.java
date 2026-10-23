@@ -19,24 +19,24 @@ public class BankService {
 
     public void registerAccount(Account account) {
         if (account == null) {
-            throw new IllegalArgumentException("Account must be not null");
+            throw new IllegalArgumentException("Account must be not null.");
         }
         if (account.getAccountNumber() == null) {
-            throw new IllegalArgumentException("Account number must be not null");
+            throw new IllegalArgumentException("Account number must be not null.");
         }
         bank.getAccounts().putIfAbsent(account.getAccountNumber(), account);
     }
 
     public Account findAccount(String accountNumber) {
         if (accountNumber == null) {
-            throw new IllegalArgumentException("Account number must be not null");
+            throw new IllegalArgumentException("Account number must be not null.");
         }
         if (accountNumber.isBlank()) {
-            throw new IllegalArgumentException("Account number must be not blank");
+            throw new IllegalArgumentException("Account number must be not blank.");
         }
         Account account = bank.getAccounts().get(accountNumber.trim());
         if (account == null) {
-            throw new AccountNotFoundException("Account number " + accountNumber + " not found");
+            throw new AccountNotFoundException("Account number " + accountNumber + " not found.");
         }
         return account;
     }

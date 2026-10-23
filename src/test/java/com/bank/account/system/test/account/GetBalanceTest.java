@@ -28,10 +28,8 @@ public class GetBalanceTest extends BaseTest {
     @Test
     @DisplayName("Get balance fails with account number is missed in the bank")
     public void testGetBalanceFailsWhenAccountNumberIsMissed() {
-        Account account = accountService.openAccount("John", AccountType.CHECKING, BigDecimal.TEN);
-        bankService.registerAccount(account);
         var exception = assertThrows(AccountNotFoundException.class, () -> accountService.getBalance("INV111"));
-        assertEquals("Account number INV111 not found", exception.getMessage());
+        assertEquals("Account number INV111 not found.", exception.getMessage());
     }
 
     @ParameterizedTest

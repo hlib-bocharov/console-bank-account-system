@@ -30,16 +30,14 @@ public class RenameOwnerTest extends BaseTest {
     @ValueSource(strings = {"", "   "})
     public void testRenameOwnerFailsWhenAccountNumberIsInvalid(String ownerName) {
         var exception = assertThrows(IllegalArgumentException.class, () -> accountService.renameOwner("ACC001", ownerName));
-        assertEquals("Owner name cannot be blank", exception.getMessage(), "Exception message is incorrect");
+        assertEquals("Owner name cannot be blank.", exception.getMessage(), "Exception message is incorrect");
     }
 
     @Test
     @DisplayName("Rename owner fails with account number is missed in the bank")
     public void testRenameOwnerFailsWhenAccountNumberIsMissed() {
-        Account account = accountService.openAccount("John", AccountType.CHECKING, BigDecimal.TEN);
-        bankService.registerAccount(account);
         var exception = assertThrows(AccountNotFoundException.class, () -> accountService.renameOwner("INV111", "Jill"));
-        assertEquals("Account number INV111 not found", exception.getMessage());
+        assertEquals("Account number INV111 not found.", exception.getMessage());
     }
 
     @ParameterizedTest

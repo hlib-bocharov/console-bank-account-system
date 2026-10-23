@@ -38,10 +38,8 @@ public class RemoveAccountTest extends BaseTest {
     @Test
     @DisplayName("Remove account fails with account number is missed in the bank")
     public void testRemoveAccountFailsWhenAccountNumberIsMissed() {
-        Account account = new Account("1234", "John", AccountType.CHECKING, BigDecimal.TWO);
-        bankService.registerAccount(account);
         var exception = assertThrows(AccountNotFoundException.class, () -> bankService.removeAccount("4321"));
-        assertEquals("Account number 4321 not found", exception.getMessage());
+        assertEquals("Account number 4321 not found.", exception.getMessage());
     }
 
 }

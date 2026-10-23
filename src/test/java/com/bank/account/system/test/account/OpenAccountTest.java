@@ -27,11 +27,11 @@ public class OpenAccountTest extends BaseTest {
 
     private static Stream<Arguments> invalidParams() {
         return Stream.of(
-                Arguments.of(null, AccountType.CHECKING, BigDecimal.TEN, "Owner name cannot be null"),
-                Arguments.of("", AccountType.CHECKING, BigDecimal.TEN, "Owner name cannot be blank"),
-                Arguments.of("  ", AccountType.CHECKING, BigDecimal.TEN, "Owner name cannot be blank"),
-                Arguments.of("John", AccountType.CHECKING, new BigDecimal("-1"), "Balance cannot be less than the allowed minimum balance for CHECKING account with minimum balance 0.00"),
-                Arguments.of("John", AccountType.SAVINGS, new BigDecimal("9"), "Balance cannot be less than the allowed minimum balance for SAVINGS account with minimum balance 10.00")
+                Arguments.of(null, AccountType.CHECKING, BigDecimal.TEN, "Owner name cannot be null."),
+                Arguments.of("", AccountType.CHECKING, BigDecimal.TEN, "Owner name cannot be blank."),
+                Arguments.of("  ", AccountType.CHECKING, BigDecimal.TEN, "Owner name cannot be blank."),
+                Arguments.of("John", AccountType.CHECKING, new BigDecimal("-1"), "Balance cannot be less than the allowed minimum balance for CHECKING account with minimum balance 0.00."),
+                Arguments.of("John", AccountType.SAVINGS, new BigDecimal("9"), "Balance cannot be less than the allowed minimum balance for SAVINGS account with minimum balance 10.00.")
         );
     }
 

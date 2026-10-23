@@ -44,10 +44,8 @@ public class FindAccountTest extends BaseTest {
     @Test
     @DisplayName("Find account fails with account number is missed in the bank")
     public void testFindAccountFailsWhenAccountNumberIsMissed() {
-        Account account = new Account("1234", "John", AccountType.CHECKING, BigDecimal.TWO);
-        bankService.registerAccount(account);
         var exception = assertThrows(AccountNotFoundException.class, () -> bankService.findAccount("4321"));
-        assertEquals("Account number 4321 not found", exception.getMessage());
+        assertEquals("Account number 4321 not found.", exception.getMessage());
     }
 
 }

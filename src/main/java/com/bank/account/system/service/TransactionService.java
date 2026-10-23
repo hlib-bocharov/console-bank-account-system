@@ -25,37 +25,40 @@ public class TransactionService {
     }
 
     public void deposit(String accountNumber, BigDecimal amount) {
+        BigDecimal checkedAmount = getRoundedAmount(getAmountIfValid(amount));
         Account account = bankService.findAccount(accountNumber);
         String timestamp = ZonedDateTime.now().toString();
-        BigDecimal resultingBalance = account.getBalance().add(getRoundedAmount(getAmountIfValid(amount)));
+        BigDecimal resultingBalance = account.getBalance().add(checkedAmount);
         account.setBalance(resultingBalance);
-        Transaction transaction = new Transaction(TransactionType.DEPOSIT, amount,  timestamp, resultingBalance);
+        Transaction transaction = new Transaction(TransactionType.DEPOSIT, checkedAmount,  timestamp, resultingBalance);
         account.addTransaction(transaction);
     }
 
     public void withdraw(String accountNumber, BigDecimal amount) throws InsufficientFundsException {
+        BigDecimal checkedAmount = getRoundedAmount(getAmountIfValid(amount));
         Account account = bankService.findAccount(accountNumber);
         String timestamp = ZonedDateTime.now().toString();
-        BigDecimal resultingBalance = account.getBalance().subtract(getRoundedAmount(getAmountIfValid(amount)));
+        BigDecimal resultingBalance = account.getBalance().subtract(checkedAmount);
         try {
             account.setBalance(getBalanceIfValidForAccountType(account.getType(), resultingBalance));
         } catch (IllegalArgumentException e) {
-            throw new InsufficientFundsException("Resulting balance cannot be less than the allowed minimum balance for %s account with minimum balance %s"
-                    .formatted(account.getType(), account.getType().getAllowedMinimumBalance()), e);
+            throw new InsufficientFundsException("Insufficient funds. Requested %s, balance %s, short by %s."
+                    .formatted(checkedAmount, account.getBalance(), checkedAmount.subtract(account.getBalance()).add(account.getType().getAllowedMinimumBalance())), e);
         }
         Transaction transaction = new Transaction(TransactionType.WITHDRAW, amount,  timestamp, resultingBalance);
         account.addTransaction(transaction);
     }
 
     public void transfer(String fromNumber, String toNumber, BigDecimal amount) throws InsufficientFundsException {
+        BigDecimal checkedAmount = getRoundedAmount(getAmountIfValid(amount));
         Account fromAccount = bankService.findAccount(fromNumber);
         withdraw(fromNumber, amount);
         try {
-            Account toAccount = bankService.findAccount(fromNumber);
+            Account toAccount = bankService.findAccount(toNumber);
             if (fromAccount.equals(toAccount)) {
-                throw new IllegalArgumentException("fromAccount and toAccount cannot be the same account");
+                throw new IllegalArgumentException("Cannot transfer amount to the same account.");
             }
-            deposit(toNumber, amount);
+            deposit(toNumber, checkedAmount);
             String timestamp = toAccount.getTransactions().getFirst().getTimestamp();
             Transaction fromTransaction = fromAccount.getTransactions().getFirst();
             Transaction toTransaction = toAccount.getTransactions().getFirst();
@@ -63,8 +66,8 @@ public class TransactionService {
             toAccount.setTransactions(removeFirstTransactions(toAccount.getTransactions(), 1));
             fromAccount.addTransaction(new Transaction(TransactionType.TRANSFER, amount, timestamp, fromTransaction.getResultingBalance()));
             toAccount.addTransaction(new Transaction(TransactionType.TRANSFER, amount, timestamp, toTransaction.getResultingBalance()));
-        } catch (AccountNotFoundException e) {
-            deposit(fromNumber, amount);
+        } catch (AccountNotFoundException | IllegalArgumentException e) {
+            deposit(fromNumber, checkedAmount);
             fromAccount.setTransactions(removeFirstTransactions(fromAccount.getTransactions(), 2));
             throw e;
         }

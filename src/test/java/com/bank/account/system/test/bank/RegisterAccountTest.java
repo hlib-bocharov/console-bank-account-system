@@ -25,7 +25,7 @@ public class RegisterAccountTest extends BaseTest {
                 IllegalArgumentException.class,
                 () -> bankService.registerAccount(null),
                 "IllegalArgumentException should have been thrown");
-        assertEquals("Account must be not null", exception.getMessage(), "Exception message is incorrect");
+        assertEquals("Account must be not null.", exception.getMessage(), "Exception message is incorrect");
         assertEquals(0, bank.getAccounts().size(), "Accounts map should be empty");
     }
 
@@ -38,7 +38,7 @@ public class RegisterAccountTest extends BaseTest {
                 IllegalArgumentException.class,
                 () -> bankService.registerAccount(account),
                 "IllegalArgumentException should have been thrown");
-        assertEquals("Account number must be not null", exception.getMessage(), "Exception message is incorrect");
+        assertEquals("Account number must be not null.", exception.getMessage(), "Exception message is incorrect");
         assertEquals(0, bank.getAccounts().size(), "Accounts map should be empty");
     }
 
