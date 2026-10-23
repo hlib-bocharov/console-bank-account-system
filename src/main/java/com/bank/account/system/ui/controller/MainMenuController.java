@@ -6,6 +6,7 @@ import com.bank.account.system.service.BankService;
 import com.bank.account.system.service.TransactionService;
 
 import java.util.InputMismatchException;
+import java.util.Map;
 
 import static com.bank.account.system.ui.ConsoleIO.getLine;
 import static com.bank.account.system.ui.ConsoleIO.getNumber;
@@ -13,35 +14,36 @@ import static com.bank.account.system.ui.ConsoleIO.getNumber;
 public class MainMenuController implements MenuController {
 
     private Bank bank;
-    private BankService bankService;
-    private AccountService accountService;
-    private TransactionService transactionService;
+    private Map<Integer, MenuController> instructionsMap;
 
-    public MainMenuController(Bank bank, BankService bankService, AccountService accountService, TransactionService transactionService) {
+    public MainMenuController(Bank bank) {
         this.bank = bank;
-        this.bankService = bankService;
-        this.accountService = accountService;
-        this.transactionService = transactionService;
+        BankService bankService = new BankService(bank);
+        instructionsMap = Map.of(
+                1, new BankMenuController(bankService),
+                2, new AccountMenuController(new AccountService(bankService), bankService),
+                3, new TransactionMenuController(new TransactionService(bankService))
+        );
     }
 
     @Override
     public void run() {
-        System.out.println(bank);
+        System.out.println("=== " + bank + " ===");
         printOptions();
         int option;
         while (true) {
             try {
                 System.out.print("> ");
                 option = getNumber();
+                if (option == 0) break;
+                instructionsMap.get(option).run();
+                System.out.println("\n=== " + bank + " ===");
+                printOptions();
             } catch (InputMismatchException e) {
+                System.out.println("Option must be integer!");
                 getLine();
-                continue;
-            }
-            switch (option) {
-                case 1 -> new BankMenuController(bankService).run();
-                case 2 -> new AccountMenuController(accountService).run();
-                case 3 -> new TransactionMenuController(transactionService).run();
-                case 0 -> System.exit(0);
+            } catch (NullPointerException e) {
+                System.out.println("Please enter a number from 0 to 3.");
             }
         }
     }
