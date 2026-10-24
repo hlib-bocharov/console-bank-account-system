@@ -54,70 +54,64 @@ public class AccountMenuController implements MenuController {
     private Void createAccount() {
         System.out.print("Owner name: ");
         String owner = ConsoleIO.getLine();
-        owner = owner.equalsIgnoreCase("null") ? null : owner;
         AccountType type = null;
         while (!(type == CHECKING || type == SAVINGS)) {
             System.out.print("Type (CHECKING/SAVINGS): ");
-            String s = ConsoleIO.getLine();
             try {
-                type = AccountType.valueOf(s.toUpperCase());
-            } catch (IllegalArgumentException e) {}
+                type = ConsoleIO.getAccountTypeValue();
+            } catch (IllegalArgumentException e) {
+            }
         }
-        BigDecimal initialDeposit = null;
-        while (initialDeposit == null) {
+        while (true) {
             System.out.print("Initial deposit: ");
-            String s = ConsoleIO.getLine();
             try {
-                initialDeposit = new BigDecimal(s);
-            } catch (NumberFormatException e) {}
-        }
-        try {
-            Account account = accountService.openAccount(owner, type, initialDeposit);
-            bankService.registerAccount(account);
-            System.out.println("Created " + account);
-        } catch (IllegalArgumentException e) {
-            System.out.println("Error: " +  e.getMessage());
+                BigDecimal initialDeposit = ConsoleIO.getBigDecimalValue();
+                Account account = accountService.openAccount(owner, type, initialDeposit);
+                bankService.registerAccount(account);
+                System.out.println("Created " + account);
+            } catch (NumberFormatException e) {
+                continue;
+            } catch (IllegalArgumentException e) {
+                System.out.println("Error: " + e.getMessage());
+            }
+            break;
         }
         return null;
     }
 
     private Void showBalance() {
         System.out.print("Account number: ");
-        String accountNumber = ConsoleIO.getLine();
-        accountNumber = accountNumber.equalsIgnoreCase("null") ? null : accountNumber;
+        String accountNumber = ConsoleIO.getStringValue();
         try {
             BigDecimal balance = accountService.getBalance(accountNumber);
             System.out.printf("Balance of account number %s is : %s%n", accountNumber, balance);
         } catch (IllegalArgumentException | AccountNotFoundException e) {
-            System.out.println("Error: " +  e.getMessage());
+            System.out.println("Error: " + e.getMessage());
         }
         return null;
     }
 
     private Void renameOwner() {
         System.out.print("Account number: ");
-        String accountNumber = ConsoleIO.getLine();
-        accountNumber = accountNumber.equalsIgnoreCase("null") ? null : accountNumber;
+        String accountNumber = ConsoleIO.getStringValue();
         System.out.print("New owner name: ");
-        String owner = ConsoleIO.getLine();
-        owner = owner.equalsIgnoreCase("null") ? null : owner;
+        String owner = ConsoleIO.getStringValue();
         try {
             accountService.renameOwner(accountNumber, owner);
             System.out.println("Account with number " + accountNumber + " renamed to " + owner);
         } catch (AccountNotFoundException | IllegalArgumentException e) {
-            System.out.println("Error: " +  e.getMessage());
+            System.out.println("Error: " + e.getMessage());
         }
         return null;
     }
 
     private Void closeAccount() {
         System.out.print("Account number: ");
-        String accountNumber = ConsoleIO.getLine();
-        accountNumber = accountNumber.equalsIgnoreCase("null") ? null : accountNumber;
+        String accountNumber = ConsoleIO.getStringValue();
         try {
             accountService.closeAccount(accountNumber);
         } catch (AccountNotFoundException | IllegalArgumentException e) {
-            System.out.println("Error: " +  e.getMessage());
+            System.out.println("Error: " + e.getMessage());
         }
         return null;
     }
