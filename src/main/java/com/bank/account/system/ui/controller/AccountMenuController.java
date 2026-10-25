@@ -53,7 +53,7 @@ public class AccountMenuController implements MenuController {
 
     private Void createAccount() {
         System.out.print("Owner name: ");
-        String owner = ConsoleIO.getLine();
+        String owner = ConsoleIO.getStringValue();
         AccountType type = null;
         while (!(type == CHECKING || type == SAVINGS)) {
             System.out.print("Type (CHECKING/SAVINGS): ");

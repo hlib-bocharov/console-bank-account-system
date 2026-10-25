@@ -55,7 +55,7 @@ public class TransactionMenuController implements MenuController {
                 System.out.print("Amount: ");
                 BigDecimal amount = ConsoleIO.getBigDecimalValue();
                 transactionService.deposit(accountNumber, amount);
-                System.out.println("Deposited amount: " + amount + "to account: " + accountNumber);
+                System.out.println("Deposited amount: " + amount + " to account: " + accountNumber);
             } catch (NumberFormatException e) {
                 continue;
             } catch (AccountNotFoundException | IllegalArgumentException | InvalidAmountException e) {
@@ -96,7 +96,7 @@ public class TransactionMenuController implements MenuController {
                 System.out.print("Amount: ");
                 BigDecimal amount = ConsoleIO.getBigDecimalValue();
                 transactionService.transfer(fromAccount, toAccount, amount);
-                System.out.println("Transferred amount:  " + amount + " from account: " + fromAccount + " to account: " + toAccount);
+                System.out.println("Transferred amount: " + amount + " from account: " + fromAccount + " to account: " + toAccount);
             } catch (NumberFormatException e) {
                 continue;
             } catch (AccountNotFoundException | IllegalArgumentException | InvalidAmountException |
