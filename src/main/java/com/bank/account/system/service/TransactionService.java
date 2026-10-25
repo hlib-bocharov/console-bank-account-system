@@ -7,7 +7,7 @@ import com.bank.account.system.model.Transaction;
 import com.bank.account.system.model.TransactionType;
 
 import java.math.BigDecimal;
-import java.time.ZonedDateTime;
+import java.time.Instant;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -27,7 +27,7 @@ public class TransactionService {
     public void deposit(String accountNumber, BigDecimal amount) {
         BigDecimal checkedAmount = getRoundedAmount(getAmountIfValid(amount));
         Account account = bankService.findAccount(accountNumber);
-        String timestamp = ZonedDateTime.now().toString();
+        String timestamp = Instant.now().toString();
         BigDecimal resultingBalance = account.getBalance().add(checkedAmount);
         account.setBalance(resultingBalance);
         Transaction transaction = new Transaction(TransactionType.DEPOSIT, checkedAmount,  timestamp, resultingBalance);
@@ -37,7 +37,7 @@ public class TransactionService {
     public void withdraw(String accountNumber, BigDecimal amount) throws InsufficientFundsException {
         BigDecimal checkedAmount = getRoundedAmount(getAmountIfValid(amount));
         Account account = bankService.findAccount(accountNumber);
-        String timestamp = ZonedDateTime.now().toString();
+        String timestamp = Instant.now().toString();
         BigDecimal resultingBalance = account.getBalance().subtract(checkedAmount);
         try {
             account.setBalance(getBalanceIfValidForAccountType(account.getType(), resultingBalance));
